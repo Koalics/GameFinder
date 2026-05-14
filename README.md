@@ -1,5 +1,17 @@
-# Vue 3 + Vite
+# GameFinder
 
-This template should help get you started developing with Vue 3 in Vite. The template uses Vue 3 `<script setup>` SFCs, check out the [script setup docs](https://v3.vuejs.org/api/sfc-script-setup.html#sfc-script-setup) to learn more.
+GameFinder is a web application for searching and filtering video games using an external API.
+The project was developed as part of a course and diploma project focused on modern web application development.
 
-Learn more about IDE Support for Vue in the [Vue Docs Scaling up Guide](https://vuejs.org/guide/scaling-up/tooling.html#ide-support).
+## Project Description
+
+The application allows users to:
+
+* search for video games by title;
+* view detailed information about games;
+* filter games by genres and platforms;
+* sort search results;
+* view ratings, release dates, and descriptions;
+* navigate to game purchase pages.
+
+The project uses the RAWG API as the main data source.
