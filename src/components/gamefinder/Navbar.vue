@@ -1,19 +1,22 @@
 <script setup>
+import { RouterLink } from 'vue-router'
+
 defineProps({
   modelValue: { type: String, default: '' },
 })
 
-const emit = defineEmits(['update:modelValue'])
+const emit = defineEmits(['update:modelValue', 'submit'])
+
+function onEnter(e) {
+  if (e.key === 'Enter') emit('submit')
+}
 </script>
 
 <template>
   <header class="navbar">
-    <a href="/" class="navbar__logo">GameFinder</a>
+    <RouterLink to="/" class="navbar__logo">GameFinder</RouterLink>
     <div class="navbar__search">
-      <svg class="navbar__search-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-        <circle cx="11" cy="11" r="6.5" stroke="currentColor" stroke-width="2" />
-        <path d="M16 16 21 21" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
-      </svg>
+      <Icon class="navbar__search-icon" icon="mdi:magnify" width="18" height="18" aria-hidden="true" />
       <input
         class="navbar__input"
         type="search"
@@ -21,6 +24,7 @@ const emit = defineEmits(['update:modelValue'])
         :value="modelValue"
         aria-label="Search games"
         @input="emit('update:modelValue', $event.target.value)"
+        @keydown="onEnter"
       />
     </div>
   </header>

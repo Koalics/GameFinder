@@ -1,9 +1,9 @@
 <script setup>
+import { nextTick, onBeforeUnmount, onMounted, ref, watch } from 'vue'
 import SortDropdown from './SortDropdown.vue'
 import GameGrid from './GameGrid.vue'
-import LoadMoreButton from './LoadMoreButton.vue'
 
-defineProps({
+const props = defineProps({
   games: { type: Array, required: true },
   loading: { type: Boolean, default: false },
   error: { type: String, default: '' },
@@ -12,7 +12,46 @@ defineProps({
   platform: { type: String, required: true },
 })
 
-defineEmits(['update:orderBy', 'update:platform', 'load-more'])
+const emit = defineEmits(['update:orderBy', 'update:platform', 'load-more'])
+
+const sentinel = ref(null)
+let observer = null
+
+function tryLoadMore() {
+  if (!props.hasMore || props.loading || props.games.length === 0) return
+  emit('load-more')
+}
+
+function attachObserver() {
+  observer?.disconnect()
+  const el = sentinel.value
+  if (!el) return
+
+  observer = new IntersectionObserver(
+    (entries) => {
+      const hit = entries.some((e) => e.isIntersecting)
+      if (hit) tryLoadMore()
+    },
+    { root: null, rootMargin: '280px 0px 0px 0px', threshold: 0 },
+  )
+  observer.observe(el)
+}
+
+onMounted(() => {
+  nextTick(() => attachObserver())
+})
+
+watch(
+  () => [props.games.length, props.hasMore, props.loading],
+  () => {
+    nextTick(() => attachObserver())
+  },
+)
+
+onBeforeUnmount(() => {
+  observer?.disconnect()
+  observer = null
+})
 
 const orderOptions = [
   { value: 'relevance', label: 'Relevance' },
@@ -55,10 +94,14 @@ const platformOptions = [
     </p>
 
     <GameGrid :games="games" />
-    <LoadMoreButton
-      v-if="games.length > 0"
-      :disabled="loading || !hasMore"
-      @click="$emit('load-more')"
+
+    <p v-if="loading && games.length > 0" class="main__loading-more">Загрузка…</p>
+
+    <div
+      v-if="games.length > 0 && hasMore"
+      ref="sentinel"
+      class="main__sentinel"
+      aria-hidden="true"
     />
   </main>
 </template>
@@ -102,5 +145,18 @@ const platformOptions = [
 
 .main__status--muted {
   color: #808080;
+}
+
+.main__loading-more {
+  margin: 1rem 0 0;
+  text-align: center;
+  font-size: 0.8125rem;
+  color: #909090;
+}
+
+.main__sentinel {
+  height: 4px;
+  margin-top: 0.5rem;
+  pointer-events: none;
 }
 </style>

@@ -1,7 +1,7 @@
 <script setup>
-import GameFinderPage from './components/GameFinderPage.vue'
+import { RouterView } from 'vue-router'
 </script>
 
 <template>
-  <GameFinderPage />
+  <RouterView />
 </template>

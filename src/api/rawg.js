@@ -123,3 +123,97 @@ export async function fetchGamesPage(key, opts) {
     next: data.next,
   }
 }
+
+/**
+ * @param {string} key
+ * @param {string|number} gameId
+ */
+export async function fetchGameDetail(key, gameId) {
+  const url = new URL(`${API}/games/${gameId}`)
+  url.searchParams.set('key', key)
+  const res = await fetch(url)
+  if (!res.ok) throw new Error(`RAWG game: ${res.status}`)
+  return res.json()
+}
+
+/**
+ * @param {string} key
+ * @param {string|number} gameId
+ * @returns {Promise<{ image: string }[]>}
+ */
+export async function fetchGameScreenshots(key, gameId) {
+  const url = new URL(`${API}/games/${gameId}/screenshots`)
+  url.searchParams.set('key', key)
+  const res = await fetch(url)
+  if (!res.ok) throw new Error(`RAWG screenshots: ${res.status}`)
+  const data = await res.json()
+  return data.results || []
+}
+
+/**
+ * @param {string} key
+ * @param {string|number} gameId
+ */
+export async function fetchGameStores(key, gameId) {
+  const url = new URL(`${API}/games/${gameId}/stores`)
+  url.searchParams.set('key', key)
+  const res = await fetch(url)
+  if (!res.ok) throw new Error(`RAWG stores: ${res.status}`)
+  const data = await res.json()
+  return data.results || []
+}
+
+/**
+ * @param {string} key
+ * @param {string|number} gameId
+ */
+export async function fetchGameAdditions(key, gameId) {
+  const url = new URL(`${API}/games/${gameId}/additions`)
+  url.searchParams.set('key', key)
+  url.searchParams.set('page_size', '24')
+  const res = await fetch(url)
+  if (!res.ok) throw new Error(`RAWG additions: ${res.status}`)
+  const data = await res.json()
+  return data.results || []
+}
+
+/**
+ * @param {string} released ISO date
+ */
+export function formatReleaseBadge(released) {
+  if (!released) return '—'
+  const d = new Date(released)
+  if (Number.isNaN(d.getTime())) return '—'
+  return d
+    .toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })
+    .toUpperCase()
+}
+
+/**
+ * @param {Record<string, unknown>} game
+ */
+export function mapDetailPlatforms(game) {
+  const list = game.platforms || []
+  const names = []
+  for (const row of list) {
+    const n = row.platform?.name
+    if (n) names.push(n)
+  }
+  return names
+}
+
+/**
+ * @param {Record<string, unknown>} game
+ * @returns {('windows'|'playstation'|'xbox')[]}
+ */
+export function mapHeroPlatformIcons(game) {
+  const parents = game.parent_platforms || []
+  const out = []
+  for (const pp of parents) {
+    const slug = pp.platform?.slug || pp.slug
+    if (slug === 'pc') out.push('windows')
+    else if (slug === 'playstation') out.push('playstation')
+    else if (slug === 'xbox') out.push('xbox')
+  }
+  return out
+}

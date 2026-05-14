@@ -16,11 +16,13 @@ The application allows users to:
 
 The project uses the [RAWG API](https://rawg.io/apidocs) as the main data source.
 
-## GitHub Pages
+## Setup
 
-Live site (after the first successful deploy): [https://koalics.github.io/GameFinder/](https://koalics.github.io/GameFinder/)
+```bash
+npm install
+npm run dev
+```
 
-1. In the repo on GitHub: **Settings → Pages → Build and deployment → Source**, choose **GitHub Actions** (not “Deploy from a branch”).
-2. Push `main` (or run the workflow manually: **Actions → Deploy to GitHub Pages → Run workflow**).
+Routes: `/` (catalog), `/game/:id` (game page, numeric RAWG id). Click a card or open e.g. `/game/3328` (The Witcher 3).
 
-The Vite `base` path is set to `/GameFinder/` for production builds so assets load correctly under `github.io/GameFinder/`.
+Icons: [Iconify](https://iconify.design/) for Vue (`@iconify/vue/offline`) with [MDI](https://pictogrammers.com/library/mdi/) and [Simple Icons](https://simpleicons.org/) (bundled, без запросов к CDN).

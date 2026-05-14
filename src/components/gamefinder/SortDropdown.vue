@@ -21,9 +21,7 @@ const emit = defineEmits(['update:modelValue'])
           {{ opt.label }}
         </option>
       </select>
-      <svg class="dropdown__chevron" width="12" height="12" viewBox="0 0 12 12" aria-hidden="true">
-        <path d="M3 4.5 6 7.5 9 4.5" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round" />
-      </svg>
+      <Icon class="dropdown__chevron" icon="mdi:chevron-down" width="16" height="16" aria-hidden="true" />
     </span>
   </label>
 </template>
@@ -66,10 +64,11 @@ const emit = defineEmits(['update:modelValue'])
 
 .dropdown__chevron {
   position: absolute;
-  right: 0.65rem;
+  right: 0.55rem;
   top: 50%;
   transform: translateY(-50%);
   pointer-events: none;
   color: #808080;
+  display: block;
 }
 </style>

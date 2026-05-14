@@ -23,19 +23,25 @@ function toggleGenre(slug) {
       <ul class="sidebar__nav">
         <li>
           <a href="#" class="sidebar__link" @click.prevent>
-            <span class="sidebar__icon" aria-hidden="true">🏆</span>
+            <span class="sidebar__icon" aria-hidden="true">
+              <Icon icon="mdi:trophy-outline" width="18" height="18" />
+            </span>
             Best of the Year
           </a>
         </li>
         <li>
           <a href="#" class="sidebar__link" @click.prevent>
-            <span class="sidebar__icon" aria-hidden="true">✨</span>
+            <span class="sidebar__icon" aria-hidden="true">
+              <Icon icon="mdi:star-four-points" width="18" height="18" />
+            </span>
             Popular in 2026
           </a>
         </li>
         <li>
           <a href="#" class="sidebar__link" @click.prevent>
-            <span class="sidebar__icon" aria-hidden="true">👑</span>
+            <span class="sidebar__icon" aria-hidden="true">
+              <Icon icon="mdi:crown-outline" width="18" height="18" />
+            </span>
             All time top 250
           </a>
         </li>
@@ -117,9 +123,11 @@ function toggleGenre(slug) {
 }
 
 .sidebar__icon {
-  font-size: 0.9rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   width: 1.25rem;
-  text-align: center;
+  color: #d0d0d0;
 }
 
 .sidebar__genres {

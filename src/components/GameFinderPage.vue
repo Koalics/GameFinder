@@ -1,5 +1,6 @@
 <script setup>
 import { onMounted, ref, shallowRef, watch } from 'vue'
+import { useRoute } from 'vue-router'
 import Navbar from './gamefinder/Navbar.vue'
 import Sidebar from './gamefinder/Sidebar.vue'
 import MainContent from './gamefinder/MainContent.vue'
@@ -22,6 +23,8 @@ const syncing = ref(true)
 
 const parentPlatformMap = ref(new Map())
 const genreOptions = ref([])
+
+const route = useRoute()
 
 const searchQuery = ref('')
 const selectedGenres = ref([])
@@ -120,6 +123,9 @@ onMounted(async () => {
         ? [genreOptions.value[0].slug]
         : []
 
+    const q = route.query.q
+    if (typeof q === 'string' && q.trim()) searchQuery.value = q.trim()
+
     await loadGames(false)
   } catch (e) {
     loadError.value = e instanceof Error ? e.message : 'Ошибка загрузки'
@@ -137,11 +143,26 @@ watch(searchQuery, () => {
   if (syncing.value || !apiKey) return
   scheduleSearchRefetch()
 })
+
+watch(
+  () => (route.name === 'home' ? String(route.query.q ?? '') : null),
+  (q) => {
+    if (q === null || syncing.value || !apiKey) return
+    if (searchQuery.value !== q) searchQuery.value = q
+    clearTimeout(searchDebounce)
+    loadGames(false)
+  },
+)
+
+function onSearchSubmit() {
+  clearTimeout(searchDebounce)
+  if (apiKey && !syncing.value) loadGames(false)
+}
 </script>
 
 <template>
   <div class="gf">
-    <Navbar v-model="searchQuery" />
+    <Navbar v-model="searchQuery" @submit="onSearchSubmit" />
     <p v-if="configError" class="gf__banner" role="alert">{{ configError }}</p>
     <div class="gf__body">
       <Sidebar v-model:selected-genres="selectedGenres" :genre-options="genreOptions" />
