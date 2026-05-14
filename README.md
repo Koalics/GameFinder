@@ -15,3 +15,12 @@ The application allows users to:
 * navigate to game purchase pages.
 
 The project uses the RAWG API as the main data source.
+
+## GitHub Pages
+
+Live site (after the first successful deploy): [https://koalics.github.io/GameFinder/](https://koalics.github.io/GameFinder/)
+
+1. In the repo on GitHub: **Settings → Pages → Build and deployment → Source**, choose **GitHub Actions** (not “Deploy from a branch”).
+2. Push `main` (or run the workflow manually: **Actions → Deploy to GitHub Pages → Run workflow**).
+
+The Vite `base` path is set to `/GameFinder/` for production builds so assets load correctly under `github.io/GameFinder/`.
