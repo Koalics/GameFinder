@@ -14,7 +14,7 @@ The application allows users to:
 * view ratings, release dates, and descriptions;
 * navigate to game purchase pages.
 
-The project uses the RAWG API as the main data source.
+The project uses the [RAWG API](https://rawg.io/apidocs) as the main data source.
 
 ## GitHub Pages
 

@@ -1,7 +1,7 @@
 <script setup>
 defineProps({
   title: { type: String, required: true },
-  image: { type: String, required: true },
+  image: { type: String, default: '' },
   releaseDate: { type: String, required: true },
   /** @type {string[]} */
   genres: { type: Array, default: () => [] },
@@ -13,7 +13,16 @@ defineProps({
 <template>
   <article class="card" role="listitem">
     <div class="card__media">
-      <img class="card__img" :src="image" :alt="title" loading="lazy" width="640" height="360" />
+      <img
+        v-if="image"
+        class="card__img"
+        :src="image"
+        :alt="title"
+        loading="lazy"
+        width="640"
+        height="360"
+      />
+      <div v-else class="card__ph" aria-hidden="true" />
       <div class="card__platforms" aria-label="Platforms">
         <span v-if="platforms.includes('windows')" class="card__plat" title="Windows">
           <svg viewBox="0 0 88 88" width="14" height="14" aria-hidden="true">
@@ -74,6 +83,12 @@ defineProps({
   position: relative;
   aspect-ratio: 16 / 9;
   background: #151515;
+}
+
+.card__ph {
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(145deg, #2a2a2a 0%, #1a1a1a 100%);
 }
 
 .card__img {

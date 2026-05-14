@@ -12,6 +12,10 @@ dist
 dist-ssr
 *.local
 
+# Секреты API (копируйте из .env.example в .env.local)
+.env
+.env.*.local
+
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json

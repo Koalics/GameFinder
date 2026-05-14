@@ -5,6 +5,9 @@ import LoadMoreButton from './LoadMoreButton.vue'
 
 defineProps({
   games: { type: Array, required: true },
+  loading: { type: Boolean, default: false },
+  error: { type: String, default: '' },
+  hasMore: { type: Boolean, default: true },
   orderBy: { type: String, required: true },
   platform: { type: String, required: true },
 })
@@ -45,8 +48,18 @@ const platformOptions = [
       />
     </div>
 
+    <p v-if="error" class="main__alert" role="alert">{{ error }}</p>
+    <p v-if="loading && games.length === 0" class="main__status">Загрузка…</p>
+    <p v-else-if="!loading && !error && games.length === 0" class="main__status main__status--muted">
+      Ничего не найдено. Измените фильтры или поиск.
+    </p>
+
     <GameGrid :games="games" />
-    <LoadMoreButton @click="$emit('load-more')" />
+    <LoadMoreButton
+      v-if="games.length > 0"
+      :disabled="loading || !hasMore"
+      @click="$emit('load-more')"
+    />
   </main>
 </template>
 
@@ -70,5 +83,24 @@ const platformOptions = [
   flex-wrap: wrap;
   gap: 1rem 1.5rem;
   margin-bottom: 1.5rem;
+}
+
+.main__alert {
+  margin: 0 0 1rem;
+  padding: 0.65rem 0.875rem;
+  border-radius: 8px;
+  background: #3d1f1f;
+  color: #ffb4b4;
+  font-size: 0.875rem;
+}
+
+.main__status {
+  margin: 0 0 1rem;
+  font-size: 0.875rem;
+  color: #c0c0c0;
+}
+
+.main__status--muted {
+  color: #808080;
 }
 </style>

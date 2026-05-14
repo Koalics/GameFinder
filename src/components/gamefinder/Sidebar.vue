@@ -1,17 +1,17 @@
 <script setup>
-import { genreList } from '../../data/games.js'
-
 const props = defineProps({
-  /** @type {string[]} */
+  /** @type {{ name: string, slug: string }[]} */
+  genreOptions: { type: Array, default: () => [] },
+  /** @type {string[]} slugs */
   selectedGenres: { type: Array, required: true },
 })
 
 const emit = defineEmits(['update:selectedGenres'])
 
-function toggleGenre(name) {
+function toggleGenre(slug) {
   const set = new Set(props.selectedGenres)
-  if (set.has(name)) set.delete(name)
-  else set.add(name)
+  if (set.has(slug)) set.delete(slug)
+  else set.add(slug)
   emit('update:selectedGenres', [...set])
 }
 </script>
@@ -30,7 +30,7 @@ function toggleGenre(name) {
         <li>
           <a href="#" class="sidebar__link" @click.prevent>
             <span class="sidebar__icon" aria-hidden="true">✨</span>
-            Popular in 2025
+            Popular in 2026
           </a>
         </li>
         <li>
@@ -44,20 +44,21 @@ function toggleGenre(name) {
 
     <section class="sidebar__block" aria-labelledby="genres-heading">
       <h2 id="genres-heading" class="sidebar__heading">Genres</h2>
-      <ul class="sidebar__genres">
-        <li v-for="g in genreList" :key="g" class="sidebar__genre-row">
+      <ul v-if="genreOptions.length" class="sidebar__genres">
+        <li v-for="g in genreOptions" :key="g.slug" class="sidebar__genre-row">
           <label class="sidebar__check">
             <input
               class="sidebar__checkbox"
               type="checkbox"
-              :checked="selectedGenres.includes(g)"
-              @change="toggleGenre(g)"
+              :checked="selectedGenres.includes(g.slug)"
+              @change="toggleGenre(g.slug)"
             />
             <span class="sidebar__box" aria-hidden="true" />
-            <span>{{ g }}</span>
+            <span>{{ g.name }}</span>
           </label>
         </li>
       </ul>
+      <p v-else class="sidebar__hint">Загрузка жанров…</p>
     </section>
   </aside>
 </template>
@@ -193,6 +194,12 @@ function toggleGenre(name) {
 .sidebar__checkbox:focus-visible + .sidebar__box {
   outline: 2px solid #fff;
   outline-offset: 2px;
+}
+
+.sidebar__hint {
+  margin: 0;
+  font-size: 0.8125rem;
+  color: #808080;
 }
 
 @media (max-width: 900px) {
