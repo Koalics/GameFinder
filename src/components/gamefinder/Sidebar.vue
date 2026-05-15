@@ -4,9 +4,10 @@ const props = defineProps({
   genreOptions: { type: Array, default: () => [] },
   /** @type {string[]} slugs */
   selectedGenres: { type: Array, required: true },
+  mobileOpen: { type: Boolean, default: false },
 })
 
-const emit = defineEmits(['update:selectedGenres'])
+const emit = defineEmits(['update:selectedGenres', 'close'])
 
 function toggleGenre(slug) {
   const set = new Set(props.selectedGenres)
@@ -14,10 +15,21 @@ function toggleGenre(slug) {
   else set.add(slug)
   emit('update:selectedGenres', [...set])
 }
+
+function closePanel() {
+  emit('close')
+}
 </script>
 
 <template>
-  <aside class="sidebar">
+  <aside class="sidebar" :class="{ 'sidebar--open': mobileOpen }">
+    <div class="sidebar__head">
+      <h2 class="sidebar__panel-title">Filters</h2>
+      <button type="button" class="sidebar__close" aria-label="Close menu" @click="closePanel">
+        <Icon icon="mdi:close" width="22" height="22" />
+      </button>
+    </div>
+
     <nav class="sidebar__block" aria-label="Top lists">
       <h2 class="sidebar__heading">Top</h2>
       <ul class="sidebar__nav">
@@ -78,6 +90,10 @@ function toggleGenre(slug) {
   background: #151515;
 }
 
+.sidebar__head {
+  display: none;
+}
+
 .sidebar__block {
   margin-bottom: 1.75rem;
 }
@@ -89,6 +105,13 @@ function toggleGenre(slug) {
 .sidebar__heading {
   margin: 0 0 0.75rem;
   font-size: 0.875rem;
+  font-weight: 600;
+  color: #fff;
+}
+
+.sidebar__panel-title {
+  margin: 0;
+  font-size: 1rem;
   font-weight: 600;
   color: #fff;
 }
@@ -210,25 +233,52 @@ function toggleGenre(slug) {
   color: #808080;
 }
 
-@media (max-width: 900px) {
+@media (max-width: 980px) {
   .sidebar {
-    width: 100%;
-    border-right: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 200;
+    width: min(300px, 88vw);
+    height: 100svh;
+    padding: 1rem 1rem 2rem;
+    border-right: 1px solid #2a2a2a;
+    overflow-y: auto;
+    transform: translateX(-100%);
+    transition: transform 0.25s ease;
+    box-shadow: none;
+  }
+
+  .sidebar--open {
+    transform: translateX(0);
+    box-shadow: 8px 0 32px rgba(0, 0, 0, 0.55);
+  }
+
+  .sidebar__head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 1.25rem;
+    padding-bottom: 0.75rem;
     border-bottom: 1px solid #2a2a2a;
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 0 1rem;
-    padding: 1rem;
   }
 
-  .sidebar__block {
-    margin-bottom: 0;
+  .sidebar__close {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    padding: 0;
+    border: none;
+    border-radius: 8px;
+    background: #202020;
+    color: #fff;
+    cursor: pointer;
   }
 
-  .sidebar__genres {
-    display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 0 0.5rem;
+  .sidebar__close:hover {
+    background: #2a2a2a;
   }
 }
 </style>

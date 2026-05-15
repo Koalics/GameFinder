@@ -30,6 +30,7 @@ const searchQuery = ref('')
 const selectedGenres = ref([])
 const orderBy = ref('relevance')
 const platform = ref('all')
+const sidebarOpen = ref(false)
 
 let apiKey = ''
 let searchDebounce = null
@@ -158,14 +159,34 @@ function onSearchSubmit() {
   clearTimeout(searchDebounce)
   if (apiKey && !syncing.value) loadGames(false)
 }
+
+function toggleSidebar() {
+  sidebarOpen.value = !sidebarOpen.value
+}
 </script>
 
 <template>
   <div class="gf">
-    <Navbar v-model="searchQuery" @submit="onSearchSubmit" />
+    <Navbar
+      v-model="searchQuery"
+      show-filters-menu
+      @submit="onSearchSubmit"
+      @toggle-filters="toggleSidebar"
+    />
     <p v-if="configError" class="gf__banner" role="alert">{{ configError }}</p>
+    <div
+      v-if="sidebarOpen"
+      class="gf__backdrop"
+      aria-hidden="true"
+      @click="sidebarOpen = false"
+    />
     <div class="gf__body">
-      <Sidebar v-model:selected-genres="selectedGenres" :genre-options="genreOptions" />
+      <Sidebar
+        v-model:selected-genres="selectedGenres"
+        :genre-options="genreOptions"
+        :mobile-open="sidebarOpen"
+        @close="sidebarOpen = false"
+      />
       <MainContent
         :games="games"
         :loading="loading"
@@ -203,11 +224,20 @@ function onSearchSubmit() {
   display: flex;
   flex: 1;
   min-height: 0;
+  position: relative;
 }
 
-@media (max-width: 900px) {
-  .gf__body {
-    flex-direction: column;
+.gf__backdrop {
+  display: none;
+}
+
+@media (max-width: 980px) {
+  .gf__backdrop {
+    display: block;
+    position: fixed;
+    inset: 0;
+    z-index: 150;
+    background: rgba(0, 0, 0, 0.6);
   }
 }
 </style>

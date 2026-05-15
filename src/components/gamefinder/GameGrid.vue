@@ -42,6 +42,12 @@ defineProps({
   outline-offset: 3px;
 }
 
+@media (max-width: 1400px) {
+  .grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
 @media (max-width: 1100px) {
   .grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
