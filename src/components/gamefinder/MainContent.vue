@@ -4,6 +4,7 @@ import SortDropdown from './SortDropdown.vue'
 import GameGrid from './GameGrid.vue'
 
 const props = defineProps({
+  title: { type: String, default: 'All Games' },
   games: { type: Array, required: true },
   loading: { type: Boolean, default: false },
   error: { type: String, default: '' },
@@ -70,7 +71,7 @@ const platformOptions = [
 
 <template>
   <main class="main">
-    <h1 class="main__title">All Games</h1>
+    <h1 class="main__title">{{ title }}</h1>
 
     <div class="main__toolbar">
       <SortDropdown

@@ -101,6 +101,8 @@ export function mapRawGame(g) {
  *   genreSlugs: string[]
  *   ordering: string
  *   parentPlatforms: string
+ *   dates?: string
+ *   metacritic?: string
  * }} opts
  */
 export async function fetchGamesPage(key, opts) {
@@ -113,6 +115,8 @@ export async function fetchGamesPage(key, opts) {
   if (opts.genreSlugs.length) url.searchParams.set('genres', opts.genreSlugs.join(','))
   if (opts.ordering) url.searchParams.set('ordering', opts.ordering)
   if (opts.parentPlatforms) url.searchParams.set('parent_platforms', opts.parentPlatforms)
+  if (opts.dates) url.searchParams.set('dates', opts.dates)
+  if (opts.metacritic) url.searchParams.set('metacritic', opts.metacritic)
 
   const res = await fetch(url)
   if (!res.ok) throw new Error(`RAWG games: ${res.status}`)

@@ -1,13 +1,23 @@
 <script setup>
+import { RouterLink } from 'vue-router'
+import { TOP_LISTS } from '../../data/topLists.js'
+
 const props = defineProps({
   /** @type {{ name: string, slug: string }[]} */
   genreOptions: { type: Array, default: () => [] },
   /** @type {string[]} slugs */
   selectedGenres: { type: Array, required: true },
+  activeListSlug: { type: String, default: 'all' },
   mobileOpen: { type: Boolean, default: false },
 })
 
 const emit = defineEmits(['update:selectedGenres', 'close'])
+
+const topNavItems = [
+  { slug: 'best-of-year', icon: 'mdi:trophy-outline', label: TOP_LISTS['best-of-year'].title },
+  { slug: 'popular-2025', icon: 'mdi:star-four-points', label: TOP_LISTS['popular-2025'].title },
+  { slug: 'all-time-250', icon: 'mdi:crown-outline', label: TOP_LISTS['all-time-250'].title },
+]
 
 function toggleGenre(slug) {
   const set = new Set(props.selectedGenres)
@@ -18,6 +28,10 @@ function toggleGenre(slug) {
 
 function closePanel() {
   emit('close')
+}
+
+function onTopNavClick() {
+  closePanel()
 }
 </script>
 
@@ -34,28 +48,30 @@ function closePanel() {
       <h2 class="sidebar__heading">Top</h2>
       <ul class="sidebar__nav">
         <li>
-          <a href="#" class="sidebar__link" @click.prevent>
+          <RouterLink
+            to="/"
+            class="sidebar__link"
+            :class="{ 'sidebar__link--active': activeListSlug === 'all' }"
+            @click="onTopNavClick"
+          >
             <span class="sidebar__icon" aria-hidden="true">
-              <Icon icon="mdi:trophy-outline" width="18" height="18" />
+              <Icon icon="mdi:view-grid-outline" width="18" height="18" />
             </span>
-            Best of the Year
-          </a>
+            All Games
+          </RouterLink>
         </li>
-        <li>
-          <a href="#" class="sidebar__link" @click.prevent>
+        <li v-for="item in topNavItems" :key="item.slug">
+          <RouterLink
+            :to="TOP_LISTS[item.slug].path"
+            class="sidebar__link"
+            :class="{ 'sidebar__link--active': activeListSlug === item.slug }"
+            @click="onTopNavClick"
+          >
             <span class="sidebar__icon" aria-hidden="true">
-              <Icon icon="mdi:star-four-points" width="18" height="18" />
+              <Icon :icon="item.icon" width="18" height="18" />
             </span>
-            Popular in 2026
-          </a>
-        </li>
-        <li>
-          <a href="#" class="sidebar__link" @click.prevent>
-            <span class="sidebar__icon" aria-hidden="true">
-              <Icon icon="mdi:crown-outline" width="18" height="18" />
-            </span>
-            All time top 250
-          </a>
+            {{ item.label }}
+          </RouterLink>
         </li>
       </ul>
     </nav>
@@ -142,6 +158,12 @@ function closePanel() {
 
 .sidebar__link:hover {
   background: #202020;
+  color: #fff;
+}
+
+.sidebar__link--active,
+.sidebar__link.router-link-active {
+  background: #252525;
   color: #fff;
 }
 
