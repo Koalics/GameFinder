@@ -2,13 +2,18 @@
 defineProps({
   /** @type {string[]} */
   images: { type: Array, default: () => [] },
-})
+});
 </script>
 
 <template>
   <section v-if="images.length" class="gal" aria-label="Screenshots">
     <div class="gal__hero">
-      <img class="gal__img gal__img--main" :src="images[0]" alt="" loading="lazy" />
+      <img
+        class="gal__img gal__img--main"
+        :src="images[0]"
+        alt=""
+        loading="lazy"
+      />
     </div>
     <div v-if="images.length > 1" class="gal__grid">
       <img

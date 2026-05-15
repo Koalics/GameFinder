@@ -1,15 +1,15 @@
 <script setup>
-import { RouterLink } from 'vue-router'
+import { RouterLink } from 'vue-router';
 
 defineProps({
   modelValue: { type: String, default: '' },
   showFiltersMenu: { type: Boolean, default: false },
-})
+});
 
-const emit = defineEmits(['update:modelValue', 'submit', 'toggle-filters'])
+const emit = defineEmits(['update:modelValue', 'submit', 'toggle-filters']);
 
 function onEnter(e) {
-  if (e.key === 'Enter') emit('submit')
+  if (e.key === 'Enter') emit('submit');
 }
 </script>
 
@@ -18,7 +18,13 @@ function onEnter(e) {
     <RouterLink to="/" class="navbar__logo">GameFinder</RouterLink>
 
     <div class="navbar__search">
-      <Icon class="navbar__search-icon" icon="mdi:magnify" width="18" height="18" aria-hidden="true" />
+      <Icon
+        class="navbar__search-icon"
+        icon="mdi:magnify"
+        width="18"
+        height="18"
+        aria-hidden="true"
+      />
       <input
         class="navbar__input"
         type="search"

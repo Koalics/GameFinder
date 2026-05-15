@@ -1,9 +1,9 @@
 <script setup>
-import { RouterLink } from 'vue-router'
+import { RouterLink } from 'vue-router';
 
 defineProps({
   gameName: { type: String, default: '' },
-})
+});
 </script>
 
 <template>

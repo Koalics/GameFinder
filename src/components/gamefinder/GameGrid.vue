@@ -1,10 +1,10 @@
 <script setup>
-import { RouterLink } from 'vue-router'
-import GameCard from './GameCard.vue'
+import { RouterLink } from 'vue-router';
+import GameCard from './GameCard.vue';
 
 defineProps({
   games: { type: Array, required: true },
-})
+});
 </script>
 
 <template>

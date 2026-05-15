@@ -1,10 +1,10 @@
 <script setup>
-import StoreIcon from '../icons/StoreIcon.vue'
+import StoreIcon from '../icons/StoreIcon.vue';
 
 defineProps({
   /** @type {{ name: string, url: string, slug: string }[]} */
   stores: { type: Array, default: () => [] },
-})
+});
 </script>
 
 <template>
@@ -12,14 +12,25 @@ defineProps({
     <h2 id="stores-heading" class="stores__h">Where to buy</h2>
     <ul class="stores__grid">
       <li v-for="s in stores" :key="s.url" class="stores__cell">
-        <a class="stores__btn" :href="s.url" target="_blank" rel="noopener noreferrer">
+        <a
+          class="stores__btn"
+          :href="s.url"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
           <span class="stores__brand">
             <span class="stores__icon-wrap" aria-hidden="true">
               <StoreIcon :slug="s.slug" :size="22" />
             </span>
             <span class="stores__name">{{ s.name }}</span>
           </span>
-          <Icon class="stores__ext" icon="mdi:open-in-new" width="14" height="14" aria-hidden="true" />
+          <Icon
+            class="stores__ext"
+            icon="mdi:open-in-new"
+            width="14"
+            height="14"
+            aria-hidden="true"
+          />
         </a>
       </li>
     </ul>

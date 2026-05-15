@@ -11,4 +11,4 @@ export const GENRE_SIDEBAR_ORDER = [
   'Platformer',
   'Racing',
   'Fighting',
-]
+];

@@ -1,24 +1,24 @@
 <script setup>
-import { computed } from 'vue'
+import { computed } from 'vue';
 
 const props = defineProps({
   /** @type {'windows'|'playstation'|'xbox'} */
   name: { type: String, required: true },
   size: { type: [Number, String], default: 16 },
-})
+});
 
 const icon = computed(() => {
   switch (props.name) {
     case 'windows':
-      return 'mdi:microsoft-windows'
+      return 'mdi:microsoft-windows';
     case 'playstation':
-      return 'simple-icons:playstation'
+      return 'simple-icons:playstation';
     case 'xbox':
-      return 'simple-icons:xbox'
+      return 'simple-icons:xbox';
     default:
-      return 'mdi:help-circle-outline'
+      return 'mdi:help-circle-outline';
   }
-})
+});
 </script>
 
 <template>

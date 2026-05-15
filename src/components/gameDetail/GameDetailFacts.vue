@@ -4,7 +4,7 @@ defineProps({
   releaseDate: { type: String, default: '—' },
   genres: { type: String, default: '—' },
   developers: { type: String, default: '—' },
-})
+});
 </script>
 
 <template>

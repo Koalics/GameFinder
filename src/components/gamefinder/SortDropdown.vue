@@ -3,9 +3,9 @@ defineProps({
   label: { type: String, default: '' },
   modelValue: { type: String, required: true },
   options: { type: Array, required: true },
-})
+});
 
-const emit = defineEmits(['update:modelValue'])
+const emit = defineEmits(['update:modelValue']);
 </script>
 
 <template>
@@ -21,7 +21,13 @@ const emit = defineEmits(['update:modelValue'])
           {{ opt.label }}
         </option>
       </select>
-      <Icon class="dropdown__chevron" icon="mdi:chevron-down" width="16" height="16" aria-hidden="true" />
+      <Icon
+        class="dropdown__chevron"
+        icon="mdi:chevron-down"
+        width="16"
+        height="16"
+        aria-hidden="true"
+      />
     </span>
   </label>
 </template>

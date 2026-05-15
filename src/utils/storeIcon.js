@@ -20,9 +20,9 @@ const SLUG_TO_ICONIFY = {
   zoom: 'simple-icons:zoom',
   twitch: 'simple-icons:twitch',
   'amazon-luna': 'simple-icons:amazonluna',
-}
+};
 
-const DEFAULT_ICON = 'mdi:storefront-outline'
+const DEFAULT_ICON = 'mdi:storefront-outline';
 
 /**
  * @param {string | undefined | null} slug поле `store.slug` из RAWG
@@ -31,6 +31,6 @@ const DEFAULT_ICON = 'mdi:storefront-outline'
 export function resolveStoreIconify(slug) {
   const key = String(slug || '')
     .toLowerCase()
-    .trim()
-  return SLUG_TO_ICONIFY[key] ?? DEFAULT_ICON
+    .trim();
+  return SLUG_TO_ICONIFY[key] ?? DEFAULT_ICON;
 }

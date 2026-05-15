@@ -15,8 +15,8 @@ export const TOP_LISTS = {
     title: 'Best of the Year',
     path: '/top/best-of-year',
     dates: () => {
-      const y = new Date().getFullYear()
-      return `${y}-01-01,${y}-12-31`
+      const y = new Date().getFullYear();
+      return `${y}-01-01,${y}-12-31`;
     },
     metacritic: '',
     defaultRawgOrdering: '-rating',
@@ -43,17 +43,17 @@ export const TOP_LISTS = {
     maxGames: 250,
     defaultGenreSlugs: [],
   },
-}
+};
 
 /** @param {string} slug */
 export function getTopListConfig(slug) {
-  return TOP_LISTS[slug] ?? TOP_LISTS.all
+  return TOP_LISTS[slug] ?? TOP_LISTS.all;
 }
 
 /** @param {import('vue-router').RouteLocationNormalizedLoaded} route */
 export function resolveListSlugFromRoute(route) {
   if (route.name === 'top-list' && typeof route.params.listSlug === 'string') {
-    return route.params.listSlug in TOP_LISTS ? route.params.listSlug : 'all'
+    return route.params.listSlug in TOP_LISTS ? route.params.listSlug : 'all';
   }
-  return 'all'
+  return 'all';
 }

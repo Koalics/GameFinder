@@ -1,5 +1,5 @@
 <script setup>
-import PlatformIcon from '../icons/PlatformIcon.vue'
+import PlatformIcon from '../icons/PlatformIcon.vue';
 
 defineProps({
   releaseBadge: { type: String, default: '—' },
@@ -8,7 +8,7 @@ defineProps({
   playtimeHours: { type: Number, default: 0 },
   title: { type: String, required: true },
   metacritic: { type: Number, default: null },
-})
+});
 </script>
 
 <template>
@@ -16,13 +16,25 @@ defineProps({
     <div class="hero-meta__row">
       <span class="hero-meta__date">{{ releaseBadge }}</span>
       <div class="hero-meta__icons" aria-label="Platforms">
-        <span v-if="platforms.includes('windows')" class="hero-meta__plat" title="Windows">
+        <span
+          v-if="platforms.includes('windows')"
+          class="hero-meta__plat"
+          title="Windows"
+        >
           <PlatformIcon name="windows" :size="16" />
         </span>
-        <span v-if="platforms.includes('playstation')" class="hero-meta__plat" title="PlayStation">
+        <span
+          v-if="platforms.includes('playstation')"
+          class="hero-meta__plat"
+          title="PlayStation"
+        >
           <PlatformIcon name="playstation" :size="16" />
         </span>
-        <span v-if="platforms.includes('xbox')" class="hero-meta__plat" title="Xbox">
+        <span
+          v-if="platforms.includes('xbox')"
+          class="hero-meta__plat"
+          title="Xbox"
+        >
           <PlatformIcon name="xbox" :size="16" />
         </span>
       </div>

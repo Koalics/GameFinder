@@ -2,7 +2,7 @@
 defineProps({
   /** @type {{ id: number, name: string }[]} */
   items: { type: Array, default: () => [] },
-})
+});
 </script>
 
 <template>

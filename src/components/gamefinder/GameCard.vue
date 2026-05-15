@@ -1,5 +1,5 @@
 <script setup>
-import PlatformIcon from '../icons/PlatformIcon.vue'
+import PlatformIcon from '../icons/PlatformIcon.vue';
 
 defineProps({
   title: { type: String, required: true },
@@ -9,7 +9,7 @@ defineProps({
   genres: { type: Array, default: () => [] },
   /** @type {('windows'|'playstation'|'xbox')[]} */
   platforms: { type: Array, default: () => [] },
-})
+});
 </script>
 
 <template>
@@ -26,10 +26,18 @@ defineProps({
       />
       <div v-else class="card__ph" aria-hidden="true" />
       <div class="card__platforms" aria-label="Platforms">
-        <span v-if="platforms.includes('windows')" class="card__plat" title="Windows">
+        <span
+          v-if="platforms.includes('windows')"
+          class="card__plat"
+          title="Windows"
+        >
           <PlatformIcon name="windows" :size="16" />
         </span>
-        <span v-if="platforms.includes('playstation')" class="card__plat" title="PlayStation">
+        <span
+          v-if="platforms.includes('playstation')"
+          class="card__plat"
+          title="PlayStation"
+        >
           <PlatformIcon name="playstation" :size="16" />
         </span>
         <span v-if="platforms.includes('xbox')" class="card__plat" title="Xbox">

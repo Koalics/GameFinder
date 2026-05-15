@@ -1,7 +1,7 @@
 <script setup>
-import { nextTick, onBeforeUnmount, onMounted, ref, watch } from 'vue'
-import SortDropdown from './SortDropdown.vue'
-import GameGrid from './GameGrid.vue'
+import { nextTick, onBeforeUnmount, onMounted, ref, watch } from 'vue';
+import SortDropdown from './SortDropdown.vue';
+import GameGrid from './GameGrid.vue';
 
 const props = defineProps({
   title: { type: String, default: 'All Games' },
@@ -11,62 +11,62 @@ const props = defineProps({
   hasMore: { type: Boolean, default: true },
   orderBy: { type: String, required: true },
   platform: { type: String, required: true },
-})
+});
 
-const emit = defineEmits(['update:orderBy', 'update:platform', 'load-more'])
+const emit = defineEmits(['update:orderBy', 'update:platform', 'load-more']);
 
-const sentinel = ref(null)
-let observer = null
+const sentinel = ref(null);
+let observer = null;
 
 function tryLoadMore() {
-  if (!props.hasMore || props.loading || props.games.length === 0) return
-  emit('load-more')
+  if (!props.hasMore || props.loading || props.games.length === 0) return;
+  emit('load-more');
 }
 
 function attachObserver() {
-  observer?.disconnect()
-  const el = sentinel.value
-  if (!el) return
+  observer?.disconnect();
+  const el = sentinel.value;
+  if (!el) return;
 
   observer = new IntersectionObserver(
     (entries) => {
-      const hit = entries.some((e) => e.isIntersecting)
-      if (hit) tryLoadMore()
+      const hit = entries.some((e) => e.isIntersecting);
+      if (hit) tryLoadMore();
     },
     { root: null, rootMargin: '280px 0px 0px 0px', threshold: 0 },
-  )
-  observer.observe(el)
+  );
+  observer.observe(el);
 }
 
 onMounted(() => {
-  nextTick(() => attachObserver())
-})
+  nextTick(() => attachObserver());
+});
 
 watch(
   () => [props.games.length, props.hasMore, props.loading],
   () => {
-    nextTick(() => attachObserver())
+    nextTick(() => attachObserver());
   },
-)
+);
 
 onBeforeUnmount(() => {
-  observer?.disconnect()
-  observer = null
-})
+  observer?.disconnect();
+  observer = null;
+});
 
 const orderOptions = [
   { value: 'relevance', label: 'Relevance' },
   { value: 'name', label: 'Name' },
   { value: 'released', label: 'Release date' },
   { value: 'rating', label: 'Rating' },
-]
+];
 
 const platformOptions = [
   { value: 'all', label: 'All platforms' },
   { value: 'pc', label: 'PC' },
   { value: 'ps', label: 'PlayStation' },
   { value: 'xbox', label: 'Xbox' },
-]
+];
 </script>
 
 <template>
@@ -90,13 +90,18 @@ const platformOptions = [
 
     <p v-if="error" class="main__alert" role="alert">{{ error }}</p>
     <p v-if="loading && games.length === 0" class="main__status">Загрузка…</p>
-    <p v-else-if="!loading && !error && games.length === 0" class="main__status main__status--muted">
+    <p
+      v-else-if="!loading && !error && games.length === 0"
+      class="main__status main__status--muted"
+    >
       Ничего не найдено. Измените фильтры или поиск.
     </p>
 
     <GameGrid :games="games" />
 
-    <p v-if="loading && games.length > 0" class="main__loading-more">Загрузка…</p>
+    <p v-if="loading && games.length > 0" class="main__loading-more">
+      Загрузка…
+    </p>
 
     <div
       v-if="games.length > 0 && hasMore"

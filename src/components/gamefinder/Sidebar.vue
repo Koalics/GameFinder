@@ -1,6 +1,6 @@
 <script setup>
-import { RouterLink } from 'vue-router'
-import { TOP_LISTS } from '../../data/topLists.js'
+import { RouterLink } from 'vue-router';
+import { TOP_LISTS } from '../../data/topLists.js';
 
 const props = defineProps({
   /** @type {{ name: string, slug: string }[]} */
@@ -9,29 +9,41 @@ const props = defineProps({
   selectedGenres: { type: Array, required: true },
   activeListSlug: { type: String, default: 'all' },
   mobileOpen: { type: Boolean, default: false },
-})
+});
 
-const emit = defineEmits(['update:selectedGenres', 'close'])
+const emit = defineEmits(['update:selectedGenres', 'close']);
 
 const topNavItems = [
-  { slug: 'best-of-year', icon: 'mdi:trophy-outline', label: TOP_LISTS['best-of-year'].title },
-  { slug: 'popular-2025', icon: 'mdi:star-four-points', label: TOP_LISTS['popular-2025'].title },
-  { slug: 'all-time-250', icon: 'mdi:crown-outline', label: TOP_LISTS['all-time-250'].title },
-]
+  {
+    slug: 'best-of-year',
+    icon: 'mdi:trophy-outline',
+    label: TOP_LISTS['best-of-year'].title,
+  },
+  {
+    slug: 'popular-2025',
+    icon: 'mdi:star-four-points',
+    label: TOP_LISTS['popular-2025'].title,
+  },
+  {
+    slug: 'all-time-250',
+    icon: 'mdi:crown-outline',
+    label: TOP_LISTS['all-time-250'].title,
+  },
+];
 
 function toggleGenre(slug) {
-  const set = new Set(props.selectedGenres)
-  if (set.has(slug)) set.delete(slug)
-  else set.add(slug)
-  emit('update:selectedGenres', [...set])
+  const set = new Set(props.selectedGenres);
+  if (set.has(slug)) set.delete(slug);
+  else set.add(slug);
+  emit('update:selectedGenres', [...set]);
 }
 
 function closePanel() {
-  emit('close')
+  emit('close');
 }
 
 function onTopNavClick() {
-  closePanel()
+  closePanel();
 }
 </script>
 
@@ -39,7 +51,12 @@ function onTopNavClick() {
   <aside class="sidebar" :class="{ 'sidebar--open': mobileOpen }">
     <div class="sidebar__head">
       <h2 class="sidebar__panel-title">Filters</h2>
-      <button type="button" class="sidebar__close" aria-label="Close menu" @click="closePanel">
+      <button
+        type="button"
+        class="sidebar__close"
+        aria-label="Close menu"
+        @click="closePanel"
+      >
         <Icon icon="mdi:close" width="22" height="22" />
       </button>
     </div>
