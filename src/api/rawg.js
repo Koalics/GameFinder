@@ -171,6 +171,110 @@ export async function fetchGameStores(key, gameId) {
   return data.results || [];
 }
 
+/** @type {Map<string, { name: string, slug: string, domain: string }> | null} */
+let storeCatalogCache = null;
+/** @type {Promise<Map<string, { name: string, slug: string, domain: string }>> | null} */
+let storeCatalogPromise = null;
+
+/**
+ * Справочник магазинов RAWG (`/stores`): id → name, slug, domain.
+ * @param {string} key
+ * @returns {Promise<Map<string, { name: string, slug: string, domain: string }>>}
+ */
+export async function fetchStoreCatalog(key) {
+  if (storeCatalogCache) return storeCatalogCache;
+  if (!storeCatalogPromise) {
+    storeCatalogPromise = (async () => {
+      const url = new URL(`${API}/stores`);
+      url.searchParams.set('key', key);
+      url.searchParams.set('page_size', '40');
+      const res = await fetch(url);
+      if (!res.ok) throw new Error(`RAWG stores catalog: ${res.status}`);
+      const data = await res.json();
+      const map = new Map();
+      for (const s of data.results || []) {
+        if (s.id == null) continue;
+        map.set(String(s.id), {
+          name: s.name || 'Store',
+          slug: typeof s.slug === 'string' ? s.slug : '',
+          domain: typeof s.domain === 'string' ? s.domain : '',
+        });
+      }
+      storeCatalogCache = map;
+      return map;
+    })();
+  }
+  return storeCatalogPromise;
+}
+
+/**
+ * @param {string} url
+ * @param {Map<string, { name: string, slug: string, domain: string }>} catalog
+ */
+function guessStoreFromUrl(url, catalog) {
+  let host = '';
+  try {
+    host = new URL(url).hostname.replace(/^www\./, '').toLowerCase();
+  } catch {
+    return null;
+  }
+  for (const meta of catalog.values()) {
+    const domain = meta.domain.replace(/^www\./, '').toLowerCase();
+    if (domain && (host === domain || host.endsWith(`.${domain}`))) {
+      return { name: meta.name, slug: meta.slug };
+    }
+  }
+  const label = host.split('.')[0];
+  if (!label) return null;
+  return {
+    name: label.charAt(0).toUpperCase() + label.slice(1),
+    slug: label,
+  };
+}
+
+/**
+ * Ссылки магазинов игры: RAWG отдаёт `store_id` + `url`, без вложенного `store`.
+ * @param {unknown[]} rows
+ * @param {Map<string, { name: string, slug: string, domain: string }>} catalog
+ * @returns {{ name: string, slug: string, url: string }[]}
+ */
+export function mapGameStoreLinks(rows, catalog) {
+  return (rows || [])
+    .map((r) => {
+      const row = /** @type {Record<string, unknown>} */ (r);
+      const url =
+        typeof row.url === 'string'
+          ? row.url
+          : typeof row.url_en === 'string'
+            ? row.url_en
+            : '';
+      if (!url) return null;
+
+      const nested = /** @type {{ name?: string, slug?: string } | undefined} */ (
+        row.store
+      );
+      if (nested?.name) {
+        return {
+          name: nested.name,
+          slug: typeof nested.slug === 'string' ? nested.slug : '',
+          url,
+        };
+      }
+
+      const storeId = row.store_id != null ? String(row.store_id) : '';
+      const meta = storeId ? catalog.get(storeId) : undefined;
+      if (meta) {
+        return { name: meta.name, slug: meta.slug, url };
+      }
+
+      const guessed = guessStoreFromUrl(url, catalog);
+      if (guessed) return { ...guessed, url };
+
+      return { name: 'Store', slug: '', url };
+    })
+    .filter((s) => s != null);
+}
+
 /**
  * @param {string} key
  * @param {string|number} gameId

@@ -14,6 +14,8 @@ import {
   fetchGameDetail,
   fetchGameScreenshots,
   fetchGameStores,
+  fetchStoreCatalog,
+  mapGameStoreLinks,
   formatReleaseBadge,
   getRawgKey,
   mapHeroPlatformIcons,
@@ -122,11 +124,12 @@ async function loadAll() {
   }
 
   try {
-    const [dRes, sRes, stRes, aRes] = await Promise.allSettled([
+    const [dRes, sRes, stRes, aRes, catalogRes] = await Promise.allSettled([
       fetchGameDetail(key, id),
       fetchGameScreenshots(key, id),
       fetchGameStores(key, id),
       fetchGameAdditions(key, id),
+      fetchStoreCatalog(key),
     ]);
 
     if (dRes.status !== 'fulfilled') {
@@ -144,17 +147,10 @@ async function loadAll() {
         : '';
     galleryImages.value = shotUrls.length > 0 ? shotUrls : bg ? [bg] : [];
 
+    const catalog =
+      catalogRes.status === 'fulfilled' ? catalogRes.value : new Map();
     const stores = stRes.status === 'fulfilled' ? stRes.value : [];
-    storeLinks.value = (stores || [])
-      .map((r) => {
-        const st = r.store || {};
-        return {
-          name: st.name || 'Store',
-          slug: typeof st.slug === 'string' ? st.slug : '',
-          url: r.url || r.url_en || '',
-        };
-      })
-      .filter((s) => s.url);
+    storeLinks.value = mapGameStoreLinks(stores, catalog);
 
     const adds = aRes.status === 'fulfilled' ? aRes.value : [];
     additionItems.value = (adds || []).map((a) => ({ id: a.id, name: a.name }));
